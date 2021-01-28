@@ -225,8 +225,6 @@ in
 
   nixpkgs.config.allowUnfree = true;
 
-  RStudio-with-my-packages = pkgs.rstudioWrapper.override{ packages = with pkgs.rPackages; [ tidyverse knitr ]; };
-
   #ghc = pkgs.haskell.packages.${compiler}.ghcWithPackages (ps: with ps; [
   #          xmonad
   #        ]);
@@ -327,8 +325,6 @@ in
     ## Java
     jetbrains.idea-ultimate
     # jdk
-
-    RStudio-with-my-packages
 
   ];
   # This value determines the Home Manager release that your
