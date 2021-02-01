@@ -2,13 +2,13 @@ These are my dotfiles.
 
 I use nixOS.
 
-This "rice" is incomplete, my bar looks terrible, but I'll improve it over the next months.
-
 OS: nixOS
-notifications: dunst
-launcher: rofi
 wm: xmonad
 bar: xmobar
+text editor: emacs 28 + pure gtk + native compilation
 
-Picture of how my horrible workspace looks like(notice the tacky bar)
-![workspace](main_workspace.png)
+Fake busy:
+![workspace_dirty](fake_busy.png)
+
+Clean:
+![workspace_clean](clean.png)

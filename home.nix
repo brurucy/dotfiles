@@ -1,8 +1,12 @@
 { config, pkgs, ... }:
 let
   unstable = import <nixpkgs-unstable> { config = { allowUnfree = true; }; };
-in
-{
+  RStudio-with-my-packages = pkgs.rstudioWrapper.override {
+    packages = with pkgs.rPackages; [ tidyverse knitr reticulate xaringan ];
+  };
+  ghc-with-xmonad = pkgs.haskell.packages.ghc884.ghcWithPackages
+    (ps: with ps; [ xmonad xmonad-contrib xmonad-extras ]);
+in {
   # Let Home Manager install and manage itself.
   programs.home-manager.enable = true;
 
@@ -18,11 +22,7 @@ in
       enable = true;
       enableContribAndExtras = true;
       config = "/home/rucy/.config/xmonad/xmonad.hs";
-      extraPackages = hp: [
-        hp.dbus
-        hp.monad-logger
-        hp.xmonad-contrib
-      ];
+      extraPackages = hp: [ hp.dbus hp.monad-logger hp.xmonad-contrib ];
     };
   };
   programs.rofi = {
@@ -56,7 +56,9 @@ in
         dmenu = "rofi -dmenu -p dunst:";
         follow = "none";
         font = "Fira Sans 11";
-        format = "<b>%s</b>\n%b";
+        format = ''
+          <b>%s</b>
+          %b'';
         frame_color = "#1a1c25";
         frame_width = "1";
         geometry = "440x15-26+26";
@@ -100,7 +102,6 @@ in
     };
   };
 
-  
   services.screen-locker = {
     enable = true;
     inactiveInterval = 30;
@@ -110,31 +111,31 @@ in
   programs.zathura = {
     enable = true;
     options = {
-      default-bg  =               "#2E3440";
-      default-fg   =              "#3B4252";
-      statusbar-fg =              "#D8DEE9";
-      statusbar-bg  =              "#434C5E";
-      inputbar-bg    =             "#2E3440";
-      inputbar-fg     =            "#8FBCBB";
-      notification-bg  =           "#2E3440";
-      notification-fg   =          "#8FBCBB";
-      notification-error-bg =       "#2E3440";
-      notification-error-fg  =     "#BF616A";
-      notification-warning-bg =    "#2E3440";
-      notification-warning-fg  =   "#BF616A";
-      highlight-color        =     "#EBCB8B";
-      highlight-active-color  =    "#81A1C1";
-      completion-bg           =    "#3B4252";
-      completion-fg            =   "#81A1C1";
-      completion-highlight-fg   =  "#8FBCBB";
-      completion-highlight-bg    = "#81A1C1";
-      recolor-lightcolor      =    "#2E3440";
-      recolor-darkcolor        =   "#ECEFF4";
-      recolor                 =    "false";
-      recolor-keephue          =   "false";
+      default-bg = "#2E3440";
+      default-fg = "#3B4252";
+      statusbar-fg = "#D8DEE9";
+      statusbar-bg = "#434C5E";
+      inputbar-bg = "#2E3440";
+      inputbar-fg = "#8FBCBB";
+      notification-bg = "#2E3440";
+      notification-fg = "#8FBCBB";
+      notification-error-bg = "#2E3440";
+      notification-error-fg = "#BF616A";
+      notification-warning-bg = "#2E3440";
+      notification-warning-fg = "#BF616A";
+      highlight-color = "#EBCB8B";
+      highlight-active-color = "#81A1C1";
+      completion-bg = "#3B4252";
+      completion-fg = "#81A1C1";
+      completion-highlight-fg = "#8FBCBB";
+      completion-highlight-bg = "#81A1C1";
+      recolor-lightcolor = "#2E3440";
+      recolor-darkcolor = "#ECEFF4";
+      recolor = "false";
+      recolor-keephue = "false";
     };
   };
-  
+
   # UwU ^_^
   programs.kitty = {
     enable = true;
@@ -152,22 +153,22 @@ in
       background = "#2e3440";
       selection_foreground = "#2e3440";
       selection_background = "#d8dee9";
-      color0  =	 "#3b4252";
-      color1  =	 "#bf616a";
-      color2  =	 "#a3be8c";
-      color3  =	 "#ebcb8b";
-      color4  =	 "#81a1c1";
-      color5  =	 "#b48ead";
-      color6  =	 "#88c0d0";
-      color7  =	 "#e5e9f0";
-      color8  =	 "#4c566a";
-      color9  =	 "#bf616a";
-      color10 =	 "#a3be8c";
-      color11 =	 "#ebcb8b";
-      color12 =	 "#81a1c1";
-      color13 =	 "#b48ead";
-      color14 =	 "#8fbcbb";
-      color15 =	 "#eceff4";
+      color0 = "#3b4252";
+      color1 = "#bf616a";
+      color2 = "#a3be8c";
+      color3 = "#ebcb8b";
+      color4 = "#81a1c1";
+      color5 = "#b48ead";
+      color6 = "#88c0d0";
+      color7 = "#e5e9f0";
+      color8 = "#4c566a";
+      color9 = "#bf616a";
+      color10 = "#a3be8c";
+      color11 = "#ebcb8b";
+      color12 = "#81a1c1";
+      color13 = "#b48ead";
+      color14 = "#8fbcbb";
+      color15 = "#eceff4";
     };
   };
   # Cool prompt
@@ -197,22 +198,19 @@ in
 
   programs.git = {
     enable = true;
-    userName  = "brurucy";
+    userName = "brurucy";
     userEmail = "brurucy@gmail.com";
   };
 
   nixpkgs.overlays = [
-    (import (builtins.fetchTarball https://github.com/nix-community/emacs-overlay/archive/master.tar.gz))
+    (import (builtins.fetchTarball
+      "https://github.com/nix-community/emacs-overlay/archive/master.tar.gz"))
   ];
 
   programs.firefox = {
     enable = true;
     profiles = {
-      myprofile = {
-        settings = {
-	        "general.smoothScroll" = false;
-	      };
-      };
+      myprofile = { settings = { "general.smoothScroll" = false; }; };
     };
   };
 
@@ -224,6 +222,8 @@ in
   services.lorri.enable = true;
 
   nixpkgs.config.allowUnfree = true;
+
+  #RStudio-with-my-packages = pkgs.rstudioWrapper.override{ packages = with pkgs.rPackages; [ tidyverse knitr ]; };
 
   #ghc = pkgs.haskell.packages.${compiler}.ghcWithPackages (ps: with ps; [
   #          xmonad
@@ -265,6 +265,7 @@ in
     zoom-us
     slack
     spotify
+    discord
 
     # Gtk stuff
     lxappearance
@@ -279,18 +280,18 @@ in
     niv
 
     # Emacs // huge
-    binutils       # native-comp needs 'as', provided by this
-    emacsPgtkGcc   # 28 + pgtk + native-comp
+    binutils # native-comp needs 'as', provided by this
+    emacsPgtkGcc # 28 + pgtk + native-comp
 
     ## Doom dependencies
     git
-    (ripgrep.override {withPCRE2 = true;})
-    gnutls              # for TLS connectivity
+    (ripgrep.override { withPCRE2 = true; })
+    gnutls # for TLS connectivity
 
     ## Optional dependencies
-    fd                  # faster projectile indexing
-    imagemagick         # for image-dired
-    zstd                # for undo-fu-session/undo-tree compression
+    fd # faster projectile indexing
+    imagemagick # for image-dired
+    zstd # for undo-fu-session/undo-tree compression
 
     ## Nix doom
     nixfmt
@@ -305,7 +306,6 @@ in
     unstable.rustc
     unstable.cargo
 
-
     ## Python
     # python3
     black
@@ -319,12 +319,17 @@ in
     unzip
 
     ## Haskell
-    ghc
+    ghc-with-xmonad
     unstable.haskell-language-server
 
     ## Java
     jetbrains.idea-ultimate
     # jdk
+
+    # RStudio
+    RStudio-with-my-packages
+
+    rnix-lsp
 
   ];
   # This value determines the Home Manager release that your

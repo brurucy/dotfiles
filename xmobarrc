@@ -1,27 +1,23 @@
-Config {  font = "xft:FantasqueSansMono Nerd Font:size=14:style=Bold:antialias=true:hinting=true"
-        , additionalFonts = [ "xft:Mononoki Nerd Font:pixelsize=16:antialias=true:hinting=true"
+Config {  font = "xft:FantasqueSansMono Nerd Font:size=12:style=Bold:antialias=true:hinting=true"
+        , additionalFonts = [ "xft:Mononoki Nerd Font:pixelsize=14:antialias=true:hinting=true"
                             , "xft:FontAwesome:pixelsize=13"
                             ]
-        , borderColor = "#5e81ac"
-        , border = TopB
         , bgColor = "#2e3440"
         , fgColor = "#e5e9f0"
         , position =  TopSize C 100 32
         , commands = [ Run Weather "EETU" ["-t","<tempC>°C"] 7200
-                     , Run Wireless "wlp1s0" [] 10
-                     , Run Memory [ "-t","Ram:<usedratio>",
+                     , Run Wireless "wlp1s0" ["-t", "直 <ssid> 說 <quality>"] 10
+                     , Run Memory [ "-t"," <usedratio>",
                       "-S", "True", "-w", "3", "-c", "0"] 10
-		     , Run Brightness [ "-t", "Br: <percent>%", "--", "-D", "intel_backlight" ] 60
-		     , Run MultiCoreTemp ["-t", "Temp: <avg>°C",
-                                          "-L", "60", "-H", "80",
-                                          "--", "--mintemp", "20", "--maxtemp", "100"] 50
-		     , Run Cpu ["-L","3","-H","50"] 10
-                     , Run Date "%a %b %_d %Y %H:%M:%S" "date" 10
-                     , Run UnsafeStdinReader
-		     , Run Volume "default" "Master" ["-t", "Vol: <volume>%"] 10
-		     , Run Battery [ "--template" , "Battery: <left>%" ] 50
+             , Run Com "/home/rucy/.config/xmobar/scripts/brightness.sh" [] "bright" 50
+		     , Run MultiCoreTemp ["-t", "<avg>°C"] 50
+		     , Run Cpu ["-t", "﬙: <total>%"] 10
+             , Run Date "%a %b %_d %Y %H:%M:%S" "date" 10
+             , Run UnsafeStdinReader
+		     , Run Com "/home/rucy/.config/xmobar/scripts/volume.sh" [] "volume" 10
+             , Run Com "/home/rucy/.config/xmobar/scripts/battery.sh" [] "battery" 50
                      ]
         , sepChar = "%"
         , alignSep = "}{"
-        , template = "<fc=#3b4252,#5e81ac> %cpu% </fc><fc=#3b4252,#81a1c1> %multicoretemp% </fc><fc=#3b4252,#ebcb8b> %memory% </fc><fc=#3b4252,#a3be8c> %default:Master% </fc><fc=#3b4252,#b48ead> %bright% </fc>} %UnsafeStdinReader% {<fc=#3b4252,#b48ead> %date% </fc><fc=#3b4252,#a3be8c> %EETU% </fc><fc=#3b4252,#ebcb8b> %battery% </fc><fc=#3b4252,#81a1c1> %wlp1s0wi% </fc>"
+        , template = "%UnsafeStdinReader% } {<fc=#3b4252,#8fbcbb:0> %cpu% %multicoretemp% </fc><fc=#3b4252,#88c0d0:0> %memory% </fc><fc=#3b4252,#81a1c1:0> %volume% %bright% </fc><fc=#3b4252,#6f89ac:0> %battery% </fc><fc=#3b4252,#5e81ac:0> %wlp1s0wi% </fc><fc=#3b4252,#b48ead:0> %date% | %EETU% </fc>"
         }
