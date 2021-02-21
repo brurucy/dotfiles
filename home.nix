@@ -194,7 +194,21 @@ in {
     enable = true;
     enableFishIntegration = true;
   };
-  programs.fish.enable = true;
+  programs.fish = {
+    enable = true;
+    shellAliases = {
+      ls = "exa";
+      grep = "rg";
+      cat = "bat";
+      find = "fd";
+      tree = "broot";
+      monitor = "btm";
+    };
+  };
+  programs.zoxide = {
+    enable = true;
+    enableFishIntegration = true;
+  };
 
   programs.git = {
     enable = true;
@@ -219,15 +233,43 @@ in {
     enableFishIntegration = true;
   };
 
+  programs.go = {
+    enable = true;
+    packages = {
+      "github.com/motemen/gore/cmd/gore" =
+        builtins.fetchGit "https://github.com/motemen/gore";
+      "github.com/mdempsky/gocode" =
+        builtins.fetchGit "https://go.googlesource.com/tools";
+      "golang.org/x/tools/cmd/godoc" =
+        builtins.fetchGit "https://go.googlesource.com/tools";
+      "golang.org/x/tools/cmd/goimports" =
+        builtins.fetchGit "https://go.googlesource.com/tools";
+      "golang.org/x/tools/cmd/gorename" =
+        builtins.fetchGit "https://go.googlesource.com/tools";
+      "golang.org/x/tools/cmd/guru" =
+        builtins.fetchGit "https://go.googlesource.com/tools";
+      "github.com/cweill/gotests/..." =
+        builtins.fetchGit "https://github.com/cweill/gotests";
+      "github.com/fatih/gomodifytags" =
+        builtins.fetchGit "https://github.com/fatih/gomodifytags";
+      "github.com/mtchavez/skiplist" =
+        builtins.fetchGit "https://github.com/mtchavez/skiplist";
+      "github.com/ryszard/goskiplist" =
+        builtins.fetchGit "https://github.com/ryszard/goskiplist";
+      "github.com/sean-public/fast-skiplist" =
+        builtins.fetchGit "https://github.com/sean-public/fast-skiplist";
+      "github.com/MauriceGit/skiplist" =
+        builtins.fetchGit "https://github.com/MauriceGit/skiplist";
+      "github.com/google/btree" =
+        builtins.fetchGit "https://github.com/google/btree";
+    };
+  };
+
+  programs.bat.enable = true;
+
   services.lorri.enable = true;
 
   nixpkgs.config.allowUnfree = true;
-
-  #RStudio-with-my-packages = pkgs.rstudioWrapper.override{ packages = with pkgs.rPackages; [ tidyverse knitr ]; };
-
-  #ghc = pkgs.haskell.packages.${compiler}.ghcWithPackages (ps: with ps; [
-  #          xmonad
-  #        ]);
 
   home.packages = with pkgs; [
 
@@ -265,6 +307,7 @@ in {
     zoom-us
     slack
     spotify
+    teams
     discord
 
     # Gtk stuff
@@ -310,6 +353,8 @@ in {
     # python3
     black
     python38Packages.python-language-server
+    python38Packages.jupyter
+    graphviz
 
     ## C
     gcc
@@ -325,12 +370,28 @@ in {
     ## Java
     jetbrains.idea-ultimate
     # jdk
+    jdk11
+    # jmeter
+    # jython
+    zip
+    p7zip
 
     # RStudio
     RStudio-with-my-packages
 
     rnix-lsp
+    openssl
 
+    # Smartid bs
+    qdigidoc
+    # Golang
+    unstable.gopls
+    # Rust utils
+    exa
+    tokei
+    procs
+
+    arandr
   ];
   # This value determines the Home Manager release that your
   # configuration is compatible with. This helps avoid breakage

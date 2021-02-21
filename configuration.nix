@@ -16,8 +16,11 @@
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
 
-  networking.hostName = "rucifer";
-  networking.wireless.enable = true;
+  networking.hostName = "ruciferno";
+  networking.networkmanager = {
+    enable = true;
+    packages = [ pkgs.networkmanager_openvpn ];
+  };
 
   time.timeZone = "Europe/Helsinki";
 
@@ -66,7 +69,7 @@
   
   users.users.rucy = {
     isNormalUser = true;
-    extraGroups  = [ "docker" "wheel" "audio" ]; # wheel for ‘sudo’.
+    extraGroups  = [ "docker" "wheel" "audio" "networkmanager"];
     shell        = pkgs.fish;
   };
 
@@ -88,15 +91,13 @@
     trustedUsers = [ "root" "rucy" ];
   };
 
-  # environment.systemPackages = with pkgs; [
-  #    font-awesome
-  # ];
-
   fonts.fonts = with pkgs; [
     (nerdfonts.override { fonts = [ "FiraCode" "3270" "BigBlueTerminal" "Hasklig" "FantasqueSansMono" "Mononoki" ]; })
     font-awesome
   ];
 
+  services.pcscd.enable = true;
+  
   system.stateVersion = "20.09";
 
 }

@@ -16,6 +16,8 @@ import System.IO
 --- Startup hooks
 import XMonad.Hooks.SetWMName
 import XMonad.Util.SpawnOnce
+--- Gridselect
+import XMonad.Actions.GridSelect
 
 myLayouts = spacing 10 $
             layoutTall ||| layoutSpiral ||| layoutGrid ||| layoutMirror ||| layoutFull
@@ -29,7 +31,7 @@ myLayouts = spacing 10 $
 myStartupHook :: X ()
 myStartupHook = do
   spawnOnce "feh --bg-scale ~/.background-image/current_wallpaper.png"
-  --spawnOnce "emacs --daemon"
+  spawnOnce "emacs --daemon"
   setWMName "LG3D"
 
 main = do
@@ -44,9 +46,9 @@ main = do
         , startupHook = myStartupHook
         , logHook = dynamicLogWithPP xmobarPP
                         { ppOutput = hPutStrLn xmproc
-                        , ppCurrent = xmobarColor "#2e3440" "#8fbcbb" . wrap " " " "
+                        , ppCurrent = xmobarColor "#2e3440" "#8fbcbb" . wrap " " " " 
                         , ppVisible = xmobarColor "#d8dee9" "#d8dee9" . wrap " " " "
-                        , ppHiddenNoWindows = xmobarColor "#2e3440" "#d8dee9" . wrap " " " "
+                       -- , ppHiddenNoWindows = xmobarColor "#2e3440" "#d8dee9" . wrap " " " "
                         , ppHidden = xmobarColor "#2e3440" "#81a1c1" . wrap " " " "
                         , ppUrgent = xmobarColor "#2e3440" "#bf616a" . wrap " " " "
                         , ppLayout = xmobarColor "#2e3440" "#bf616a:0" . wrap " " " "
@@ -59,8 +61,9 @@ main = do
         , ((0 , xF86XK_AudioRaiseVolume), spawn "amixer -q set Master 5%+")
         , ((0 , xF86XK_AudioLowerVolume), spawn "amixer -q set Master 5%-")
         , ((0 , xF86XK_AudioMute), spawn "amixer -q set Master toggle")
-        , ((0 , xF86XK_MonBrightnessUp), spawn "brightnessctl s 100+")
+        , ((0 , xF86XK_MonBrightnessUp), spawn "brightnessctl s 100+")    
         , ((0 , xF86XK_MonBrightnessDown), spawn "brightnessctl s 100-")
         , ((mod4Mask, xF86XK_Display), spawn "betterlockscreen -l dimblur")
         , ((mod4Mask, xK_z), spawn "emacsclient --create-frame --alternate-editor=\"\"")
+        , ((mod4Mask, xK_g), goToSelected defaultGSConfig)
         ]
