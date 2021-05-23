@@ -4,6 +4,7 @@ import XMonad
 import XMonad.Hooks.DynamicLog
 import XMonad.Hooks.ManageDocks
 import XMonad.Util.Run(spawnPipe)
+import XMonad.Util.NamedScratchpad
 --- For Layouts
 import XMonad.Layout.Spiral
 import Data.Ratio
@@ -40,18 +41,19 @@ main = do
         { manageHook = manageDocks <+> manageHook def
         , layoutHook = avoidStruts  $ myLayouts
         , terminal = "kitty"
-        , normalBorderColor  = "#b48ead"
-        , focusedBorderColor = "#88c0d0"
+        , normalBorderColor  = "#ea51b2"
+        , focusedBorderColor = "#b45bcf"
         , borderWidth = 5
         , startupHook = myStartupHook
         , logHook = dynamicLogWithPP xmobarPP
                         { ppOutput = hPutStrLn xmproc
-                        , ppCurrent = xmobarColor "#2e3440" "#8fbcbb" . wrap " " " " 
-                        , ppVisible = xmobarColor "#d8dee9" "#d8dee9" . wrap " " " "
-                       -- , ppHiddenNoWindows = xmobarColor "#2e3440" "#d8dee9" . wrap " " " "
-                        , ppHidden = xmobarColor "#2e3440" "#81a1c1" . wrap " " " "
-                        , ppUrgent = xmobarColor "#2e3440" "#bf616a" . wrap " " " "
-                        , ppLayout = xmobarColor "#2e3440" "#bf616a:0" . wrap " " " "
+                        , ppSort = fmap (namedScratchpadFilterOutWorkspace .) (ppSort def)
+                        , ppCurrent = xmobarColor "#c792ea" "#c792ea" . wrap "" " "
+                        , ppVisible = xmobarColor "#ab47bc" "#ab47bc" . wrap "" " "
+                        , ppHidden = xmobarColor "#ab47bc" "#ab47bc" . wrap "" " "
+                        , ppHiddenNoWindows = xmobarColor "#4d4f68" "#4d4f68" . wrap "" " "
+                        , ppLayout = xmobarColor "#282936" "#ea51b2:0" . wrap " " " "
+                        , ppSep = " | "
                         , ppTitle = const ""
                         }
         , modMask = mod4Mask

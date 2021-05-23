@@ -8,7 +8,6 @@
   imports =
     [ 
       ./hardware-configuration.nix
-      (import "${builtins.fetchTarball https://github.com/rycee/home-manager/archive/master.tar.gz}/nixos")
     ];
 
   boot.kernelPackages = pkgs.linuxPackages_latest;
@@ -41,36 +40,29 @@
     enable = true;
     driSupport32Bit = true;
   };
-
-  services.xserver.enable = true;
-  services.xserver.layout = "us";
-  services.xserver.xkbVariant = "altgr-intl";
-  services.xserver.xkbOptions = "eurosign:e";
-
-  services.xserver.libinput.enable = true;
-
+  
   services.xserver = {
-    windowManager.xmonad = {
-      enable = true;
-      enableContribAndExtras = true;
-      extraPackages = haskellPackages: [
-        haskellPackages.xmonad-contrib
-	      haskellPackages.xmonad-extras
-	      haskellPackages.xmonad
-      ];
+    desktopManager = {
+    	default = "gnome";
+    	gnome3.enable = true;
     };
-    displayManager.lightdm.enable = true;
-    displayManager.defaultSession = "none+xmonad";
+    enable = true;
+    layout = "us";
+    xkbVariant = "altgr-intl";
+    xkbOptions = "eurosign:e";
+    libinput.enable = true;
   };
 
-  programs.fish.enable = true;
   nixpkgs.config.allowUnfree = true;
   virtualisation.docker.enable = true;
+  
+  programs.fish.enable = true;
+  programs.fish.shellInit = "starship init fish | source";
   
   users.users.rucy = {
     isNormalUser = true;
     extraGroups  = [ "docker" "wheel" "audio" "networkmanager"];
-    shell        = pkgs.fish;
+    shell = pkgs.fish;
   };
 
   nix = {
@@ -98,7 +90,8 @@
 
   services.pcscd.enable = true;
   
+  # environment.systemPackages = with pkgs; [ google-chrome ];
+  
   system.stateVersion = "20.09";
 
 }
-

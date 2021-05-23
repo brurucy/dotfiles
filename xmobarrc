@@ -2,22 +2,16 @@ Config {  font = "xft:FantasqueSansMono Nerd Font:size=12:style=Bold:antialias=t
         , additionalFonts = [ "xft:Mononoki Nerd Font:pixelsize=14:antialias=true:hinting=true"
                             , "xft:FontAwesome:pixelsize=13"
                             ]
-        , bgColor = "#2e3440"
-        , fgColor = "#e5e9f0"
+        , bgColor = "#282936"
+        , fgColor = "#e9e9f4"
         , position =  TopSize C 100 32
-        , commands = [ Run Weather "EETU" ["-t","<tempC>°C"] 7200
-                     , Run Wireless "wlp1s0" ["-t", "直 <ssid> 說 <quality>"] 10
-                     , Run Memory [ "-t"," <usedratio>",
-                      "-S", "True", "-w", "3", "-c", "0"] 10
+        , commands = [ Run Wireless "wlp1s0" ["-t", "直 <ssid> 說 <quality>"] 10
              , Run Com "/home/rucy/.config/xmobar/scripts/brightness.sh" [] "bright" 50
-		     , Run MultiCoreTemp ["-t", "<avg>°C"] 50
-		     , Run Cpu ["-t", "﬙: <total>%"] 10
              , Run Date "%a %b %_d %Y %H:%M:%S" "date" 10
              , Run UnsafeStdinReader
 		     , Run Com "/home/rucy/.config/xmobar/scripts/volume.sh" [] "volume" 10
-             , Run Com "/home/rucy/.config/xmobar/scripts/battery.sh" [] "battery" 50
-                     ]
+             , Run Com "/home/rucy/.config/xmobar/scripts/battery.sh" [] "battery" 50 ]
         , sepChar = "%"
         , alignSep = "}{"
-        , template = "%UnsafeStdinReader% } {<fc=#3b4252,#8fbcbb:0> %cpu% %multicoretemp% </fc><fc=#3b4252,#88c0d0:0> %memory% </fc><fc=#3b4252,#81a1c1:0> %volume% %bright% </fc><fc=#3b4252,#6f89ac:0> %battery% </fc><fc=#3b4252,#5e81ac:0> %wlp1s0wi% </fc><fc=#3b4252,#b48ead:0> %date% | %EETU% </fc>"
+        , template = "%UnsafeStdinReader% } {<fc=#b45bcf> %volume% %bright% </fc><fc=#b45bcf> %battery% </fc><fc=#b45bcf> %wlp1s0wi% </fc><fc=#b45bcf> %date% </fc>"
         }
