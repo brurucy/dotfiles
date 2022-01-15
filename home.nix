@@ -1,4 +1,7 @@
-{ config, pkgs, ... }: {
+{ config, pkgs, ... }:
+let
+  unstable = import <unstable> {};
+in {
   programs.home-manager.enable = true;
 
   home.username = "rucycarneiro";
@@ -22,7 +25,11 @@
     interactiveShellInit =
       ''
       set -x VOLTA_HOME $HOME/.volta
+      set -x GOPATH $HOME/go
+      set -x DEVBOX_HOME $HOME/.local
       fish_add_path -a $VOLTA_HOME/bin
+      fish_add_path -a $GOPATH/bin
+      fish_add_path -a $DEVBOX_HOME/bin
       '';
   };
 
@@ -50,7 +57,7 @@
         bold_italic = {
           family = "Victor Mono";
         };
-        size = 14;
+        size = 13;
       };
       draw_bold_text_with_bright_colors = true;
       colors = {
@@ -160,8 +167,8 @@ set-option -g history-limit 10000
 
   nixpkgs.overlays = [
     (import (builtins.fetchTarball {
-      url = https://github.com/nix-community/emacs-overlay/archive/8320c615b706f0d459544d7d37a59c5a5ff5e7e0.tar.gz;
-      sha256 = "1pajyn4n0yzi8qxlqjlh20zhdifxfvxqdcjmphqmb8b5p2grk2rx";
+      url = https://github.com/nix-community/emacs-overlay/archive/0d01d3b11249a471c80ab2c972646c4c809b8237.tar.gz;
+      sha256 = "0w2xp1l2mby3hidc12qsls8hm9md1rar3yvrdlzfqy15gax87ir7";
     }))
   ];
 
@@ -170,30 +177,34 @@ set-option -g history-limit 10000
     package = pkgs.emacsGcc;
   };
 
-  home.packages = with pkgs; [
+  home.packages = [
     # Utilities
-    exa
-    bat
-    ripgrep
-    fd
+    pkgs.exa
+    pkgs.bat
+    unstable.ripgrep
+
+    # Extra dev dependencies
+    pkgs.cmake
 
     # Kubernetes related
-    k9s
-    kubectl
-
+    unstable.kubectl
+    unstable.kubernetes-helm
+    
     # Languages
-    go_1_17
-    python39
-    rustup
-    coq_8_13
+    pkgs.go_1_17
+    unstable.rustup
+    
+    # Language servers
+    pkgs.rnix-lsp
+    unstable.texlab
+   
+    # Latex bloat
+    unstable.texlive.combined.scheme-full
 
     # Fonts
-    victor-mono
-    fantasque-sans-mono
-
-    # Latex
-    texlive.combined.scheme-full
+    pkgs.victor-mono
+    pkgs.fantasque-sans-mono
   ];
   
-  home.stateVersion = "21.05";
+  home.stateVersion = "21.11";
 }
