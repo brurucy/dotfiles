@@ -7,7 +7,7 @@ in {
   home.homeDirectory = "/Users/rucycarneiro";
 
   programs.git = {
-    userEmail = "rucy.carneiro@pipedrive.com";
+    userEmail = "brurucy@gmail.com";
     userName = "brurucy";
     enable = true;
     extraConfig = {
@@ -26,7 +26,7 @@ in {
       set -x VOLTA_HOME $HOME/.volta
       set -x DEVBOX_HOME $HOME/.local
       set -x CARGO_BIN $HOME/.cargo
-      set -x JAVA_HOME /usr/libexec/java_home
+      set -x JAVA_HOME /opt/homebrew/Cellar/openjdk/17.0.2/libexec/openjdk.jdk/Contents/Home/bin
       set -x GOPRIVATE 'github.com/pipedrive/*'
       set -x KUBECONFIG $HOME/.kubeconfig
 
@@ -39,14 +39,14 @@ in {
       bind \u222B 'backward-word'
 
       set --universal fish_color_error ff6c6b
-      set --universal fish_color_normal 118C53
-      set --universal fish_color_keyword c678dd
-      set --universal fish_color_command 51afef
-      set --universal fish_color_quote DFDFDF
-      set --universal fish_color_operator c678dd
-      set --universal fish_color_escape 118C53
-      set --universal fish_color_autosuggestion bbc2cf
-      set --universal fish_color_option 46D9FF
+      set --universal fish_color_normal FFB000
+      set --universal fish_color_keyword FFB000
+      set --universal fish_color_command FFB000
+      set --universal fish_color_quote FFB000
+      set --universal fish_color_operator FFB000
+      set --universal fish_color_escape FFB000
+      set --universal fish_color_autosuggestion FFCC00
+      set --universal fish_color_option FFB000
     '';
   };
 
@@ -58,18 +58,17 @@ in {
         args = [ "-l" "-c" "tmux attach || tmux" ];
       };
       font = {
-        normal = { family = "Fantasque Sans Mono"; };
-        bold = { family = "Fantasque Sans Mono"; };
-        italic = { family = "Victor Mono"; };
-        bold_italic = { family = "Victor Mono"; };
-        size = 12;
-        use_thin_strokes = false;
+        normal = { family = "Berkeley Mono"; };
+        bold = { family = "Berkeley Mono"; };
+        italic = { family = "Berkeley Mono"; };
+        bold_italic = { family = "Berkeley Mono"; };
+        size = 16;
       };
       draw_bold_text_with_bright_colors = true;
       colors = {
         primary = {
           background = "#131826";
-          foreground = "#0CCC68";
+          foreground = "#FFB000";
         };
         normal = {
           black = "#131826";
@@ -102,6 +101,7 @@ in {
       set-window-option -g xterm-keys on
       set-option -g default-terminal "xterm-256color"
       set-option -g default-shell /Users/rucycarneiro/.nix-profile/bin/fish
+      set-option -g default-command /Users/rucycarneiro/.nix-profile/bin/fish
       set-option -s escape-time 0
       set-option -g mouse on
       run-shell '\
@@ -134,14 +134,13 @@ in {
       tmux select-window -t #{window_id};         \
       tmux select-window -t %1;                   \
       "'
-      set-option -g status-style bg='#282c34',fg='#bfbfbf'
+      set-option -g status-style bg='#FFB000',fg='#131826'
       set-option -g status-interval 1
 
-      set-option -g status-left '#[bg=#5699AF]#[fg=#282c34]#{?client_prefix,#[bg=#c678dd],} ○ '
-      set-option -ga status-left '#[bg=#282c34]#[fg=#c678dd]#{?window_zoomed_flag, ⭤ ,    }'
+      set-option -g status-left ""
 
-      set-option -g window-status-current-format "#[fg=#282c34]#[bg=#bd93f9]#[fg=#f8f8f2]#[bg=#bd93f9] #I #W #[fg=#bd93f9]#[bg=#282c34]"
-      set-option -g window-status-format "#[fg=#f8f8f2]#[bg=#282c34]#I #W #[fg=#282c34]"
+      set-option -g window-status-current-format "#[bg=#FFB000]#[fg=#131826] #I #W "
+      set-option -g window-status-format "#[bg=#FFCC00]#[fg=#131826] #I #W "
 
       set-option -g status-right ""
       set-option -g monitor-activity on
@@ -164,7 +163,7 @@ in {
     enableFishIntegration = true;
     settings = {
       character = {
-        success_symbol = "[𝝺](#118C53)";
+        success_symbol = "[𝝺](#FFB000)";
         error_symbol = "[𝝺](#ff665c)";
       };
     };
@@ -173,8 +172,8 @@ in {
   nixpkgs.overlays = [
     (import (builtins.fetchTarball {
       url =
-        "https://github.com/nix-community/emacs-overlay/archive/d32cf21820f0c14bb4dc7911e4d8d81b891a8f82.tar.gz";
-      sha256 = "045bqf15lxba75lzp95l1xg6ah5cl7p04gkyihsxl3a9j9ngr219";
+        "https://github.com/nix-community/emacs-overlay/archive/297107759dabf44f3d3bde8c98dfc736d16e77b1.tar.gz";
+      sha256 = "05c4d23i2r38c8dwkxsjx5f4ni9r893473jyj81fvlnf9krrd1ps";
     }))
   ];
 
@@ -185,7 +184,7 @@ in {
 
   home.packages = [
     # Utilities
-    pkgs.exa
+    pkgs.lsd
     pkgs.bat
     unstable.ripgrep
     pkgs.tokei
@@ -194,38 +193,37 @@ in {
     pkgs.jq
     unstable.nodePackages.snyk
     pkgs.nixfmt
-    unstable.dhall-json
     pkgs.graphviz
     unstable.difftastic
     unstable.weechat
+    pkgs.nodePackages.pkg
+    unstable.golangci-lint
+    unstable.tree-sitter
+    pkgs.coreutils
+    pkgs.protobuf
 
     # Extra dev dependencies
     unstable.nodePackages.prettier
-    unstable.gcc11
 
     # Kubernetes related
     unstable.kubectl
     unstable.kubernetes-helm
+    # unstable.colima
+    unstable.podman
+    pkgs.qemu
+    unstable.buildkit
 
     # Languages
-    unstable.rustup
-    unstable.go_1_18
+    pkgs.rustup
+    unstable.go
     pkgs.cmake
-    unstable.chez-racket
-    unstable.dhall
     pkgs.python310
-
-    # FPGA
-    pkgs.haskellPackages.clash-ghc
-
     # Debuggers
     unstable.delve
 
     # Language servers
     pkgs.lua53Packages.digestif
     unstable.rnix-lsp
-    pkgs.nodePackages.bash-language-server
-    unstable.dhall-lsp-server
     unstable.gopls
     unstable.rust-analyzer
     unstable.nodePackages.typescript-language-server
@@ -233,9 +231,8 @@ in {
     # Latex bloat
     unstable.texlive.combined.scheme-full
 
-    # Fonts
+    # Font
     pkgs.victor-mono
-    pkgs.fantasque-sans-mono
   ];
 
   home.stateVersion = "21.11";
